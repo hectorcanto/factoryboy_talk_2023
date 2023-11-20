@@ -1,0 +1,43 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+sqlalchemy = "~=1.4"
+psycopg2 = "*"
+pydantic = "*"
+
+[dev-packages]
+markdownslides = {git = "https://gitlab.com/da_doomer/markdown-slides.git"}
+black = "*"
+isort = "*"
+interrogate = "*"
+codespell = "*"
+ipython = "*"
+autotyping = "*"
+pre-commit = "*"
+flake8 = "*"
+factory-boy = "*"
+faker = "*"
+pylint = "*"
+pylint-pytest = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-env = "*"
+pytest-sugar = "*"
+pytest-mock = "*"
+pytest-factoryboy = "*"
+pytest-freezegun = "*"
+handsdown = "*"
+doit = "*"
+diagrams = "*"
+sqlalchemy-utils = "*"
+pipfile-requirements = "*"
+pipdeptree = "*"
+pytest-ordering = "*"
+bump2version = "*"
+arrow = "*"
+
+[requires]
+python_version = "3.10"

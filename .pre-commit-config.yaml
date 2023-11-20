@@ -1,0 +1,102 @@
+repos:
+  # TODO use local
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v2.17.12
+    hooks:
+      - id: commitizen
+        stages:
+          - commit-msg
+
+  - repo: local
+    hooks:
+
+      - id: isort
+        name: isort
+        entry: isort
+        alias: sort
+        files: &files ^example.*$
+        types: [python]
+        exclude: &snaps snap_[^\.]+\.py?$
+        language: python
+
+      - id: black
+        name: black
+        entry: pipenv run black --config=pyproject.toml
+        files: *files
+        language: python
+        language_version: python3.10
+        types_or: [python, pyi]
+        exclude: '(snap_[^\.]+\.py?$|^.*\.(yml|yaml))'
+
+      - id: flake8
+        name: flake8
+        entry: flake8
+        alias: flake
+        files: *files
+        exclude: '(snap_[^\.]+\.py?$|^.*\.(yml|yaml|cfg))'
+        types: [python]
+        language: system
+
+      - id: interrogate
+        name: interrogate
+        alias: docs
+        files: *files
+        entry: interrogate
+        args: [--config=setup.cfg]
+        exclude: '(__init__.py|snap_[^\.]+\.py?$)'
+        types: [python]
+        language: python
+
+      - id: remove_current_marker
+        name: remove pytest current marker
+        alias: current
+        entry: sed -i "/pytest.mark.current/d"
+        files: (^.*\/tests\/|tests)
+        types: [python]
+        language: system
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-yaml
+        args: ['--unsafe']
+        exclude: .gitlab-ci.template.yml
+      - id: check-json
+      - id: trailing-whitespace
+        exclude: .bumpversion.cfg
+      - id: end-of-file-fixer
+        exclude: .*\.svg|\.idea.*
+      - id: no-commit-to-branch
+      - id: pretty-format-json
+        args: ['--autofix']
+        exclude: (Pipfile.lock)
+      - id: debug-statements
+      - id: check-added-large-files
+      - id: check-ast
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.2
+    hooks:
+      - id: codespell
+        name: codespell
+        alias: spell
+        description: Checks for common misspellings in text files.
+        entry: codespell --ignore-words .coverage-reports/spelling.txt
+        exclude: ^src\/templates.*|.*\.json$$
+
+  -   repo: https://github.com/asottile/blacken-docs
+      rev: v1.12.1
+      hooks:
+      -   id: blacken-docs
+
+  -   repo: local
+      hooks:
+      - id: pylint
+        name: pylint
+        alias: lint
+        entry: pylint
+        args: [-v, --rcfile=setup.cfg, --fail-under=8]
+        files: *files
+        exclude: *snaps
+        types: [python]
+        language: system
